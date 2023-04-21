@@ -23,7 +23,7 @@ ENV BUILD_ENV=$BUILD_ENV \
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends apt-transport-https curl gnupg net-tools && \
     apt-get install -y --no-install-recommends build-essential libpq-dev && \
-    apt-get install -y --no-install-recommends rsync locales chrpath pkg-config libfreetype6 libfontconfig1 git cmake wget unzip nginx && \
+    apt-get install -y --no-install-recommends rsync locales chrpath pkg-config libfreetype6 libfontconfig1 git cmake wget unzip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -52,9 +52,6 @@ RUN if [ "$BUILD_ENV" = "test" ]; then \
 
 WORKDIR $APP_HOME
 
-# Nginx config
-COPY config/nginx/app.conf.template /etc/nginx/conf.d/default.conf
-
 # Skip installing gem documentation
 RUN mkdir -p /usr/local/etc \
 	&& { \
@@ -68,8 +65,8 @@ RUN mkdir -p /usr/local/etc \
 		echo 'update: --no-document'; \
 	} >> /usr/local/etc/gemrc
 
-# Copy all denpendencies from app and engines into tmp/docker to install
-COPY tmp/docker ./
+# Copy all denpendencies from Gemfile
+COPY Gemfile* ./
 
 # Install Ruby gems
 RUN gem install bundler && \

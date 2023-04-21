@@ -1,0 +1,71 @@
+# fly.toml file generated for captain-internal-certificate-ruby on 2023-04-20T14:22:56+07:00
+
+app = "captain-internal-certificate-ruby"
+primary_region = "sin"
+
+[build]
+   [build.args]
+     BUILD_COMMAND = "bin/rails fly:build"
+     SERVER_COMMAND = "bin/rails fly:server"
+
+[deploy]
+    release_command = "bin/rails fly:release"
+
+[env]
+    ASSET_HOST = ""
+    DEPLOYED_HOST = "captain-internal-certificate-ruby.fly.dev"
+    BUILD_ENV = "production"
+    NODE_ENV = "production"
+    PORT = "8080"
+    RUBY_ENV = "production"
+
+[experimental]
+    auto_rollback = true
+
+[http_service]
+  internal_port = 8080
+  processes = ["web"]
+  force_https = true
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 20
+    hard_limit = 25
+
+[processes]
+  web = "bin/rails fly:server"
+  worker = "bundle exec sidekiq"
+
+[[services]]
+  http_checks = []
+  internal_port = 8080
+  processes = ["web"]
+  protocol = "tcp"
+  script_checks = []
+    [services.concurrency]
+      hard_limit = 25
+      soft_limit = 20
+      type = "connections"
+
+    [[services.ports]]
+      force_https = true
+      handlers = ["http"]
+      port = 80
+
+    [[services.ports]]
+      handlers = ["tls", "http"]
+      port = 443
+
+[checks]
+  [checks.alive]
+    type = "tcp"
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "5s"
+  [checks.listening]
+    grace_period = "10s"
+    interval = "30s"
+    method = "get"
+    path = "/health_check"
+    port = 8080
+    timeout = "10s"
+    type = "http"

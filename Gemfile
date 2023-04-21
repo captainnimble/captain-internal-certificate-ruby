@@ -45,6 +45,7 @@ group :development do
   gem 'spring-commands-rspec' # This gem implements the rspec command for Spring.
   gem 'spring-watcher-listen', '2.0.1' # Makes Spring watch the filesystem for changes using Listen
   # gem 'web-console' # Use console on exceptions pages
+  gem "dockerfile-rails", ">= 1.2"
 end
 
 group :development, :test do
@@ -65,7 +66,7 @@ group :development, :test do
 
   # Code Analysis
   gem 'bullet' # help to kill N+1 queries and unused eager loading
-  gem 'brakeman', require: false # A static analysis security vulnerability scanner for Ruby on Rails applications
+  gem 'brakeman', '5.3.1', require: false # A static analysis security vulnerability scanner for Ruby on Rails applications
   gem 'parser', '3.2.1.1' # Use correct parser version to avoid parser warnings
   gem 'rubocop', require: false # A Ruby static code analyzer and formatter, based on the community Ruby style guide.
   gem 'rubocop-rails', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.

@@ -1,4 +1,8 @@
 {
   "name": "captain_internal_certificate_ruby",
-  "private": "true"
+  "private": "true",
+  "scripts": {
+    "build": "echo skipped",
+    "build:css": "echo skipped"
+  }
 }
